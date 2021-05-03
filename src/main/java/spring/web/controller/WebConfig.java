@@ -10,5 +10,4 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackageClasses = WebConfig.class)
 public class WebConfig {
 
-
 }
