@@ -1,27 +1,35 @@
 package spring.web;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+
 public class Employee {
 
-    private int id;
+    private long id;
+
     private String name;
-    private static int counter;
 
     public Employee(String name) {
-        counter++;
-        id = counter;
         this.name = name;
     }
 
-    public Employee(int id, String name) {
+
+    public Employee(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public int getId() {
+    public Employee() {
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

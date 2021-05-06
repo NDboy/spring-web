@@ -2,13 +2,24 @@ package spring.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.ui.context.ThemeSource;
+import org.springframework.ui.context.support.ResourceBundleThemeSource;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.ThemeResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.theme.SessionThemeResolver;
+import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
@@ -51,5 +62,61 @@ public class WebConfig implements WebMvcConfigurer {
         resolver.setTemplateMode("HTML5");
         return resolver;
     }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        return new CookieLocaleResolver();
+    }
+
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+        interceptor.setParamName("lang");
+        return interceptor;
+    }
+
+    @Bean
+    public ClientLoggerHandlerInterceptor clientLoggerHandlerInterceptor() {
+        return new ClientLoggerHandlerInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(themeChangeInterceptor());
+//        registry.addInterceptor(clientLoggerHandlerInterceptor());
+        registry.addInterceptor(localeChangeInterceptor());
+    }
+
+    @Bean
+    public ThemeSource themeSource() {
+        ResourceBundleThemeSource resourceBundleThemeSource =
+                new ResourceBundleThemeSource();
+        resourceBundleThemeSource.setBasenamePrefix("theme-");
+        return resourceBundleThemeSource;
+    }
+
+    @Bean
+    public ThemeResolver themeResolver() {
+        SessionThemeResolver sessionThemeResolver = new SessionThemeResolver();
+        sessionThemeResolver.setDefaultThemeName("normal");
+        return sessionThemeResolver;
+    }
+
+    @Bean
+    public ThemeChangeInterceptor themeChangeInterceptor() {
+        ThemeChangeInterceptor themeChangeInterceptor = new ThemeChangeInterceptor();
+        themeChangeInterceptor.setParamName("theme");
+        return themeChangeInterceptor;
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource =
+                new ResourceBundleMessageSource();
+        messageSource.setBasename("messages"); // properties állomány eleje
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
+
 
 }

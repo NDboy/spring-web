@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>Employees Application</title>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{${#themes.code('css')}}" />
 
 </head>
 <body>
 
-    <h1 th:fragment="title">Employees Application</h1>
+    <h1 th:fragment="title" th:text="#{title}">Employees</h1>
 
 </body>
 </html>

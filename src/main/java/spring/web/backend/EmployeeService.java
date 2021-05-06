@@ -15,7 +15,7 @@ public class EmployeeService {
 
     private AtomicInteger id = new AtomicInteger();
 
-    private List<Employee> emps = IntStream.range(1,15)
+    private List<Employee> emps = IntStream.range(1,8)
             .mapToObj(i -> new Employee(id.incrementAndGet(), "John Doe 0" + i))
             .collect(Collectors.toList());
 
