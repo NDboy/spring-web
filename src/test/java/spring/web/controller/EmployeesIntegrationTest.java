@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextHierarchy({@ContextConfiguration(classes = BackendConfig.class),
         @ContextConfiguration(classes = WebConfig.class)})
 @WebAppConfiguration
+@Sql(statements = "delete from employees")
 public class EmployeesIntegrationTest {
 
     @Autowired
@@ -38,7 +40,7 @@ public class EmployeesIntegrationTest {
 
     @BeforeEach
     public void setup() {
-        employeeService.reset();
+//        employeeService.reset();
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
@@ -53,8 +55,6 @@ public class EmployeesIntegrationTest {
                 .andExpect(model().attribute("employees", hasItem(hasProperty("name", equalTo("John Doe")))))
                 .andExpect(content().string(containsString("John Doe")));
     }
-
-
 
 
 }
